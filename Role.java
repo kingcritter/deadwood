@@ -3,10 +3,15 @@ public class Role implements Comparable<Role> {
   private int rank;
   private Player player;
   private boolean onCard;
+  private String name;
+  private String line;
 
   /* create role with specified rank */
-  public Role(int rank) {
+  public Role(int rank, String name, String line, boolean onCard) {
     this.rank = rank;
+    this.name = name;
+    this.line = line;
+    this.onCard = onCard;
   }
 
   /* return the ID*/
@@ -26,6 +31,14 @@ public class Role implements Comparable<Role> {
 
   public boolean isOnCard() {
     return onCard;
+  }
+
+  public String getLine() {
+    return line;
+  }
+
+  public String getName() {
+    return name;
   }
 
   /* sets the id */

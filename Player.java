@@ -45,6 +45,14 @@ public class Player {
    return true; 
   }
 
+  public void payDollars(int money) {
+    this.money = money;
+  }
+
+  public void payCredits(int credits) {
+    this.credits = credits;
+  }
+
   public boolean canMove() {
     if (!moved && currRoll == null) {
       return true;
@@ -55,5 +63,9 @@ public class Player {
 
   public void endTurn() {
     moved = false;
+  }
+
+  public void leaveRole() {
+    currRoll = null;
   }
 }

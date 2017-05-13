@@ -6,10 +6,12 @@ public class Room {
   private Room south;
   private Room east;
   private Room west;
+  private ArrayList<String> neighbors;
 
   /* creates room with specified name.*/
-  public Room(String name) {
+  public Room(String name, ArrayList<String> neighbors) {
     this.name = name;
+    this.neighbors = neighbors;
   }
 
   /* returns the list of rooms in the order NESW (clockwise from top) */

@@ -18,7 +18,7 @@ public class Card {
     return budget;
   }
 
-  public List<Role> getRoles() {
+  public ArrayList<Role> getRoles() {
     return onCardRoles;
   }
 
