@@ -1,29 +1,58 @@
-public class Role {
+public class Role implements Comparable<Role> {
   private int rank;
   private Player player;
   private int id;
+  private boolean onCard;
 
+  /* create role with specified rank */
   public Role(int rank) {
-    
+    this.rank = rank;
   }
 
+  /* return the rank */
   public int getRank() {
-    return 0;
+    return this.rank;
   }
 
+  /* return the player */
   public Player getPlayer() {
-    return null;
+    return this.player;
   }
 
+  /* return the ID*/
   public int getId() {
-    return 0;
+    return this.id;
   }
 
+  public boolean isOnCard() {
+    return onCard;
+  }
+
+  /* sets the id */
   public void setId(int id) {
-
+    this.id = id;
   }
 
+  /* sets the player */
   public void setPlayer(Player p) {
+    this.player = p;
+  }
 
+  public void setOnCard(boolean b) {
+    this.onCard = b;
+  }
+
+  /* implementing compareTo allows Roles to be sorted;
+     sorting is by rank, and the natural order is low to high*/
+  @Override
+  public int compareTo(Role other) {
+    int otherRank = other.getRank();
+    if (this.rank < otherRank) {
+      return -1;
+    } else if (this.rank > otherRank) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }
