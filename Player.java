@@ -20,7 +20,7 @@ public class Player {
   }
 
   public String getLocation() {
-    return true;
+    return null;
   }
 
   public void takeRole(int roleId) {

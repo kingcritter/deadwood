@@ -1,10 +1,13 @@
+import java.util.*;
+
 public class Card {
   private int budget;
   private ArrayList<Role> onCardRoles;
   private String title;
   private String flavorText;
 
-  public Card(budget, roles, title, flavorText){
+  public Card(int budget, ArrayList<Role> roles, 
+              String title, String flavorText) {
     this.budget = budget;
     this.onCardRoles = roles;
     this.title = title;
