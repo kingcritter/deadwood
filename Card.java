@@ -1,21 +1,30 @@
 public class Card {
   private int budget;
   private ArrayList<Role> onCardRoles;
+  private String title;
+  private String flavorText;
 
-  /* Create the card with the specified information */
-  public Card(int budget, List<Roles> roles) {
+  public Card(budget, roles, title, flavorText){
     this.budget = budget;
     this.onCardRoles = roles;
+    this.title = title;
+    this.flavorText = flavorText;
   }
 
-  /* returns the budget */
   public int getBudget() {
-    return this.budget;
+    return budget;
   }
 
-  /* returns the list of roles on the card */
   public List<Role> getRoles() {
     return onCardRoles;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public String getFlavorText() {
+    return flavorText;
   }
 
 }

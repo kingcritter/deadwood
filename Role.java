@@ -1,12 +1,17 @@
 public class Role implements Comparable<Role> {
+  private int id; 
   private int rank;
   private Player player;
-  private int id;
   private boolean onCard;
 
   /* create role with specified rank */
   public Role(int rank) {
     this.rank = rank;
+  }
+
+  /* return the ID*/
+  public int getId() {
+    return this.id;
   }
 
   /* return the rank */
@@ -17,11 +22,6 @@ public class Role implements Comparable<Role> {
   /* return the player */
   public Player getPlayer() {
     return this.player;
-  }
-
-  /* return the ID*/
-  public int getId() {
-    return this.id;
   }
 
   public boolean isOnCard() {

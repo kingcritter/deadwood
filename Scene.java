@@ -80,10 +80,6 @@ public class Scene extends Room {
     }
   }
 
-  private void removePlayer(Role r) {
-    r.setPlayer(null);
-  }
-
   // public ArrayList<Role> getAvailableRoles() {
   //   return null;
   // }
