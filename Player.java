@@ -124,8 +124,9 @@ public class Player {
             rank = 6;
             money = money - 40;
          }
+         return true;
       }
-    return true;
+      return false;
   }
 
   public boolean upgradeWithCredits(int newRank) {
@@ -151,8 +152,9 @@ public class Player {
             rank = 6;
             credits = credits - 25;
          }
+         return true;
       }
-   return true; 
+      return false;
   }
 
   public void payDollars(int money) {
