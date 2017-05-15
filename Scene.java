@@ -85,9 +85,20 @@ public class Scene extends Room {
     }
   }
 
-  // public ArrayList<Role> getAvailableRoles() {
-  //   return null;
-  // }
+  public ArrayList<Role> getAvailableRoles() {
+    ArrayList<Role> availableRoles = new ArrayList<Role>();
+    for(Role sceneRole: roles){
+      if(sceneRole.getPlayer() == null){
+        availableRole.add(sceneRole);
+      }
+    }
+    for(Role onCardRole: getOnCardRoles()){
+      if(onCardRole.getPlayer() == null){
+        availableRole.add(onCardRole);
+      }
+    }
+    return availableRoles;
+  }
 
   /* lists all roles, filled and unfilled, not on the card */
   public ArrayList<Role> getSceneRoles() {
