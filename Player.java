@@ -74,12 +74,15 @@ public class Player {
   public boolean act() {
     Random rand = new Random();
     int diceRoll = rand.nextInt(6) + 1;
+    System.out.println("You rolled " + diceRoll);
     if(diceRoll < currRole.getBudget()){
+      System.out.println("Acting failed.");
       if(currRole.onCard == false){
          money = money + 1;
       }
       return false;
     }else{
+      System.out.println("Acting succeeded!");
       if(currRole.onCard == true){
          credits = credits + 2;
       }else{
