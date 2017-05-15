@@ -14,6 +14,7 @@ public class Scene extends Room {
     this.roles = roles;
     this.takesTotal = takes;
     this.takesLeft = takes;
+    this.isScene = true;
   }
 
   /* Calls functions to pay players and remove them from their roles */
