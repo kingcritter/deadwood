@@ -7,6 +7,7 @@ public class CLIClient {
     System.out.println("Please enter number of players: ");
     int numPlayers = userInput.nextInt();
     //initialize board
+    game = new Gameboard(numPlayers);
     //modify game rules
     //distribute initial cards
     //while running
