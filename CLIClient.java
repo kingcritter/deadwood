@@ -3,10 +3,15 @@ public class CLIClient {
 
   public static void main(String[] args) {
     //get number of players
+    Scanner userInput = new Scanner(System.in);
+    System.out.println("Please enter number of players: ");
+    int numPlayers = userInput.nextInt();
+    //initialize board
     //modify game rules
     //distribute initial cards
     //while running
-      //start player turn
+      //while player turn
+        //show possible commands (need variables to track remaining possible actions
         //get command from player
         //check if command is valid
         //if 'who'
