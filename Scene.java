@@ -109,4 +109,13 @@ public class Scene extends Room {
     return wrapped;
   }
 
+  public void setCard(Card card) {
+    this.card = card;
+  }
+
+  public void reset() {
+    wrapped = false;
+    takesLeft = takesTotal;
+  }
+
 }

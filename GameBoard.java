@@ -8,15 +8,20 @@ public class GameBoard {
   private ArrayList<Room> roomList;
   private ArrayList<Scene> sceneList;
   private Room trailer;
+  private CastingOffice castingOffice;
+  private ArrayList<Card> cardDeck;
   private int playerIndex = 0;
   private int numPlayers;
   private running = true;
 
   public GameBoard(int numPlayers) {
-    // pull xml shit
-
-
     this.numPlayers = numPlayers;
+
+    /* pull in data from XML files */
+    initializeFromXML();
+
+    /* attatch a card to each scene */
+    distributeCards();
 
     /* generate all the players */
     for (int i = 0; i < numPlayers; i++) {
@@ -24,7 +29,7 @@ public class GameBoard {
       playerList.add(p);
     }
 
-    /* randomize the order */
+    /* randomize the player order */
     Collections.shuffle(playerList);
 
     /* start with first player */
@@ -45,6 +50,25 @@ public class GameBoard {
     } else if (numPlayers > 6) {
       setPlayerStats(0, 2);
     }
+  }
+
+  /* randomly distribute cards to scenes and reset scenes */
+  private void distributeCards() {
+    Collections.shuffle(cardDeck);
+    int card = 0;
+    for (Scene s : sceneList) {
+      s.reset();
+      s.setCard(cardDeck.get(card));
+      card++;
+    }
+  }
+
+  private void initializeFromXML() {
+    DataReader dr = new DataReader();
+    sceneList = dr.getSceneList();
+    trailer = dr.getTrailer();
+    castingOffice = dr.getCastingOffice();
+    cardDeck = dr.getCardList();
   }
 
   /* called by modifyRules() */
