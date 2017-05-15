@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Room {
   private String name;
-  private boolean isScene;
+  private boolean isScene = false;
   private Room north;
   private Room south;
   private Room east;
