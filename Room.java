@@ -31,6 +31,10 @@ public class Room {
     return this.name;
   }
 
+  public ArrayList<String> getNeighbors() {
+    return neighbors;
+  }
+
   /* sets the rooms in the order NESW (clockwise from top) */
   public void setRooms(Room n, Room e, Room s, Room w) {
     this.north = n;
