@@ -1,35 +1,49 @@
+import.java.Random;
+
 public class Player {
-  private int rank;
-  private int money;
-  private int credits;
-  private int rehearseBonus;
+  private int rank = 1;
+  private int money = 0;
+  private int credits = 0;
+  private int rehearseBonus = 0;
   private Room currRoom;
-  private Role currRole;
+  private Role currRole = null;
+  private Scene currScene = null;
   private boolean moved; 
 
   public Player(Room startingRoom) {
-
+    currRoom = startingRoom;
   }
 
   // idea for this: base movement on directions. Client will always
   // list rooms in NESW order (clockwise form top) and assign id's 
   // 1 through 4. This number will be entered by user and passed to 
   // this function. 
-  public boolean moveTo(int id) {
-    if(id == 1){
-      currRoom = currRoom.neighbors.get(1);
-    }else if(id == 2){
-      currRoom = currRoom.neighbors.get(2);
-    }else if(id == 3){
-      currRoom = currRoom.neighbors.get(3);
-    }else{
-      currRoom = currRoom.neighbors.get(4);
+  public boolean moveTo(string newRoom) {
+    boolean canMove = false;
+    for(Room neighbor: currRoom.getAdjacent()){
+      if(newRoom.equals(neighbor.getName()){
+         currRoom = neighbor;
+         canMove = true;
+         if(neighbor.isScene()){
+            currScene = (Scene) neighbor;
+         }else{
+            currScene = null;
+         }
+       }
     }
-    return true;
+    return canMove;
   }
 
   public String getLocation() {
-    return this.currRoom;
+    return currRoom;
+  }
+  
+  public boolean isInScene(){
+    if(currScene == null){
+      return false;
+    }else{
+      return true;
+    }
   }
 
   public void setRank(int rank){
@@ -40,11 +54,24 @@ public class Player {
     return rank;
   }
   
-  public void takeRole(int roleId) {
-
+  public ArrayList<Role> getAvailableRoles(){
+     ArrayList<Role> roles = currScene.getAvailableRoles();
+     return roles;
+  }
+  
+  public boolean takeRole(string newRole) {
+    boolean canTakeRole = false;
+    for(Role availableRole: getAvailableRoles()){
+      if(newRole.equals(availableRole.getName()){
+         currRole = availableRole;
+         currRole.setPlayer(this);
+         canTakeRole = true;
+      }
+    }
+    return canTakeRole;
   }
 
-   public boolean act() {
+  public boolean act() {
     Random rand = new Random();
     int diceRoll = rand.nextInt(6) + 1;
     if(roll < currRole.getBudget()){
@@ -59,23 +86,24 @@ public class Player {
          money = money + 1;
          credit = credit + 1;
       }
-      role.takesLeft = role.takesLeft - 1;//does this work?
+      currScene.takesLeft = currScene.takesLeft - 1;
       return true;
   }
 
+  // not more than +5
   public boolean rehearse() {
-    if(rehearseBonus+1 != currRole.getBudget()){
+    if(rehearseBonus+1 != currScene.getBudget)(){
       this.rehearseBonus = this.rehearseBonus + 1;
     }
     return true;
   }
 
-    public boolean upgradeWithDollars() {//why are the upgrade methods booleans?
+  public boolean upgradeWithDollars() {
     ArrayList<Integer> possibleRanks;
     if(rank == 6){
       System.out.println("No further upgrade possible.");
     }else{
-      possibleRanks = CastingOffice.showPossibleRanksDollars(rank, money);//handle player input here
+      possibleRanks = CastingOffice.showPossibleRanksDollars(rank, money);
       System.out.println("Possible ranks:");
       for(int i = 0; i < possibleRanks.length; i++){
          System.out.println(possibleRanks.get(i));
@@ -145,11 +173,11 @@ public class Player {
   }
 
   public void payDollars(int money) {
-    this.money += money; //should this be += ?
+    this.money += money; 
   }
 
   public void payCredits(int credits) {
-    this.credits += credits;//should this be += ?
+    this.credits += credits;
   }
 
   public boolean canMove() {
