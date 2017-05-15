@@ -51,26 +51,83 @@ public class Player {
 
   // not more than +5
   public boolean rehearse() {
-    if(rehearseBonus+1 != currRole.budget){//does this work?
+    if(rehearseBonus+1 != currRole.budget){
       this.rehearseBonus = this.rehearseBonus + 1;
     }
     return true;
   }
 
-  public boolean upgradeWithDollars() {//why are the upgrade methods booleans?
+    public boolean upgradeWithDollars() {//why are the upgrade methods booleans?
+    ArrayList<Integer> possibleRanks;
     if(rank == 6){
       System.out.println("No further upgrade possible.");
     }else{
-      CastingOffice.showPossibleRanksDollars(rank, money);//handle player input here
+      possibleRanks = CastingOffice.showPossibleRanksDollars(rank, money);//handle player input here
+      System.out.println("Possible ranks:");
+      for(int i = 0; i < possibleRanks.length; i++){
+         System.out.println(possibleRanks.get(i));
+      }
+      System.out.println("Enter the rank you want to upgrade to.");
+      boolean getInput = true;
+      while(getInput == true){
+         Scanner scanner = new Scanner(System.in);
+         int newRank = scanner.nextLine();
+         if(newRank == 2){
+            rank = 2;
+            money = money - 4;
+         }else if(newRank == 3){
+            rank = 3;
+            money = money - 10;
+         }else if(newRank == 4){
+            rank = 4;
+            money = money - 18;
+         }else if(newRank == 5){
+            rank = 5;
+            money = money - 28;
+         }else if(newRank == 6){
+            rank = 6;
+            money = money - 40;
+         }else{
+            System.out.println("Please enter one of the possible ranks.");
+         }
+      }
     return true;
   }
 
   public boolean upgradeWithCredits() {
-   if(rank == 6){
+   ArrayList<Integer> possibleRanks;
+    if(rank == 6){
       System.out.println("No further upgrade possible.");
-   }else{
-      CastingOffice.showPossibleRanksCredits(rank, credits);
-   }
+    }else{
+      possibleRanks = CastingOffice.showPossibleRanksCredits(rank, credits);
+      System.out.println("Possible ranks:");
+      for(int i = 0; i < possibleRanks.length; i++){
+         System.out.println(possibleRanks.get(i));
+      }
+      System.out.println("Enter the rank you want to upgrade to.");
+      boolean getInput = true;
+      while(getInput == true){
+         Scanner scanner = new Scanner(System.in);
+         int newRank = scanner.nextLine();
+         if(newRank == 2){
+            rank = 2;
+            credits = credits - 5;
+         }else if(newRank == 3){
+            rank = 3;
+            credits = credits - 10;
+         }else if(newRank == 4){
+            rank = 4;
+            credits = credits - 15;
+         }else if(newRank == 5){
+            rank = 5;
+            credits = credits - 20;
+         }else if(newRank == 6){
+            rank = 6;
+            credits = credits - 25;
+         }else{
+            System.out.println("Please enter one of the possible ranks.");
+         }
+      }
    return true; 
   }
 
