@@ -2,6 +2,7 @@ import java.util.*;
 
 public class Room {
   private String name;
+  private boolean isScene;
   private Room north;
   private Room south;
   private Room east;
@@ -29,6 +30,10 @@ public class Room {
   /* returns the name of the room */
   public String getName() {
     return this.name;
+  }
+  
+  public boolean isScene(){
+    return isScene;
   }
 
   public ArrayList<String> getNeighbors() {
