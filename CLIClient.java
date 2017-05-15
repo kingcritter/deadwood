@@ -26,7 +26,7 @@ public class CLIClient {
         //if 'work part'
           //attempt to take role
         //if 'upgrade $ level'
-          //attempt to upgrade
+          //attempt to upgrade (there is a conditional for if upgrade is possible)
         //if 'upgrade cr level'
           //attempt to upgrade
         //if 'rehearse'
