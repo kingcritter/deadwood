@@ -74,7 +74,7 @@ public class Player {
   public boolean act() {
     Random rand = new Random();
     int diceRoll = rand.nextInt(6) + 1;
-    if(roll < currRole.getBudget()){
+    if(diceRoll < currRole.getBudget()){
       if(currRole.onCard == false){
          money = money + 1;
       }
