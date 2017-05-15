@@ -44,14 +44,27 @@ public class Player {
 
   }
 
-  public boolean act() {
-    return false;
-
+   public boolean act() {
+    Random rand = new Random();
+    int diceRoll = rand.nextInt(6) + 1;
+    if(roll < currRole.getBudget()){
+      if(currRole.onCard == false){
+         money = money + 1;
+      }
+      return false;
+    }else{
+      if(currRole.onCard == true){
+         credits = credits + 2;
+      }else{
+         money = money + 1;
+         credit = credit + 1;
+      }
+      role.takesLeft = role.takesLeft - 1;//does this work?
+      return true;
   }
 
-  // not more than +5
   public boolean rehearse() {
-    if(rehearseBonus+1 != currRole.budget){
+    if(rehearseBonus+1 != currRole.getBudget()){
       this.rehearseBonus = this.rehearseBonus + 1;
     }
     return true;
