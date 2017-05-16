@@ -21,6 +21,9 @@ public class GameBoard {
     /* pull in data from XML files */
     initializeFromXML();
 
+    /* ling Room object references to eachother */
+    linkRooms();
+
     /* distribute cards to all the scenes */
     Collections.shuffle(cardDeck);
     int card = 0;
@@ -31,7 +34,7 @@ public class GameBoard {
 
     /* generate all the players */
     for (int i = 0; i < numPlayers; i++) {
-      Player p = new Player(null);      
+      Player p = new Player(i, trailer);      
       playerList.add(p);
     }
 
@@ -44,6 +47,23 @@ public class GameBoard {
     /* set rules based on player number */
     modifyRules();
 
+  }
+
+  /* After the XML parsing in DataReader is complete, we have
+     a roomList, but the rooms only have a list of strings saying
+     what their neighbors are. This links them up with actual room
+     object references.  */
+  private void linkRooms() {
+    for (Room room : roomList) {
+      for (String neighbor : room.getNeighbors()) {
+        for (Room room2 : roomList) {
+          if (neighbor.equals(room2.getName())) {
+            room.addAdjacent(room2);
+            break;
+          }
+        }
+      }
+    }
   }
 
   /* set rules based on player number */
@@ -83,6 +103,15 @@ public class GameBoard {
     trailer = dr.getTrailer();
     castingOffice = dr.getCastingOffice();
     cardDeck = dr.getCardList();
+
+    /* generate roomlist */
+    roomList = new ArrayList<>();
+    for (Scene s : sceneList) {
+      roomList.add(s);
+    }
+    roomList.add(trailer);
+    roomList.add(castingOffice);
+
   }
 
   /* called by modifyRules() */

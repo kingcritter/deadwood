@@ -146,6 +146,9 @@ public class Scene extends Room {
   public void setCard(Card card) {
     this.card = card;
   }
+  public boolean isScene() {
+    return isScene;
+  }
 
   public void reset() {
     wrapped = false;

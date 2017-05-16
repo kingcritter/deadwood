@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class Player {
+  private int id;
   private int rank = 1;
   private int money = 0;
   private int credits = 0;
@@ -10,13 +11,18 @@ public class Player {
   private Scene currScene = null;
   private boolean moved; 
 
-  public Player(Room startingRoom) {
+  public Player(int id, Room startingRoom) {
     currRoom = startingRoom;
+    this.id = id;
   }
 
   public boolean moveTo(String newRoom) {
+    /* get rid of newlines and excess whitespace */
+    newRoom = newRoom.replace(System.getProperty("line.separator"), "");
+    newRoom = newRoom.trim().replaceAll(" +", " ");
+
     boolean canMove = false;
-    for(Room neighbor: currRoom.getAdjacentRooms()){
+    for(Room neighbor : currRoom.getAdjacentRooms()){
       if(newRoom.equals(neighbor.getName())) {
          setRoom(neighbor);
          canMove = true;
@@ -27,6 +33,14 @@ public class Player {
 
   public Room getLocation() {
     return currRoom;
+  }
+
+  public Scene getScene() {
+    return currScene;
+  }
+
+  public int getID() {
+    return id;
   }
   
   public boolean isInScene() {
@@ -168,6 +182,10 @@ public class Player {
 
   public int getCredits() {
     return credits;
+  }
+
+  public Role getRole() {
+    return currRole;
   }
 
   public boolean canMove() {

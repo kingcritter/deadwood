@@ -185,7 +185,7 @@ public class DataReader {
 
     ArrayList<Scene> scenes = dr.getSceneList();
     for (Scene scene : scenes) {
-      System.out.println(scene.getOnCardRoles());
+      System.out.println(scene.getName());
       // for (Role r : scene.getOnCardRoles()) {
       //   System.out.println(r.getName());
       // }
