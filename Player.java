@@ -1,4 +1,4 @@
-import.java.Random;
+import java.util.*;
 
 public class Player {
   private int rank = 1;
@@ -14,34 +14,25 @@ public class Player {
     currRoom = startingRoom;
   }
 
-  // idea for this: base movement on directions. Client will always
-  // list rooms in NESW order (clockwise form top) and assign id's 
-  // 1 through 4. This number will be entered by user and passed to 
-  // this function. 
-  public boolean moveTo(string newRoom) {
+  public boolean moveTo(String newRoom) {
     boolean canMove = false;
-    for(Room neighbor: currRoom.getAdjacent()){
-      if(newRoom.equals(neighbor.getName()){
-         currRoom = neighbor;
+    for(Room neighbor: currRoom.getAdjacentRooms()){
+      if(newRoom.equals(neighbor.getName())) {
+         setRoom(neighbor);
          canMove = true;
-         if(neighbor.isScene()){
-            currScene = (Scene) neighbor;
-         }else{
-            currScene = null;
-         }
        }
     }
     return canMove;
   }
 
-  public String getLocation() {
+  public Room getLocation() {
     return currRoom;
   }
   
-  public boolean isInScene(){
-    if(currScene == null){
+  public boolean isInScene() {
+    if (currScene == null) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
@@ -59,10 +50,10 @@ public class Player {
      return roles;
   }
   
-  public boolean takeRole(string newRole) {
+  public boolean takeRole(String newRole) {
     boolean canTakeRole = false;
-    for(Role availableRole: getAvailableRoles()){
-      if(newRole.equals(availableRole.getName()){
+    for(Role availableRole: getAvailableRoles()) {
+      if(newRole.equals(availableRole.getName())) {
          currRole = availableRole;
          currRole.setPlayer(this);
          canTakeRole = true;
@@ -75,27 +66,28 @@ public class Player {
     Random rand = new Random();
     int diceRoll = rand.nextInt(6) + 1;
     System.out.println("You rolled " + diceRoll);
-    if(diceRoll < currRole.getBudget()){
+    if(diceRoll < currScene.getBudget()){
       System.out.println("Acting failed.");
-      if(currRole.onCard == false){
+      if(currRole.isOnCard() == false){
          money = money + 1;
       }
       return false;
     }else{
       System.out.println("Acting succeeded!");
-      if(currRole.onCard == true){
+      if(currRole.isOnCard() == true){
          credits = credits + 2;
       }else{
          money = money + 1;
-         credit = credit + 1;
+         credits = credits + 1;
       }
-      currScene.takesLeft = currScene.takesLeft - 1;
+      currScene.decrementShotCounter();
       return true;
+    }
   }
 
   // not more than +5
   public boolean rehearse() {
-    if(rehearseBonus+1 != currScene.getBudget)(){
+    if(rehearseBonus+1 < currScene.getBudget()) { 
       this.rehearseBonus = this.rehearseBonus + 1;
     }
     return true;
@@ -127,6 +119,9 @@ public class Player {
          return true;
       }
       return false;
+    }
+
+    return false;
   }
 
   public boolean upgradeWithCredits(int newRank) {
@@ -155,6 +150,8 @@ public class Player {
          return true;
       }
       return false;
+    }
+    return false;
   }
 
   public void payDollars(int money) {
@@ -165,6 +162,14 @@ public class Player {
     this.credits += credits;
   }
 
+  public int getDollars() {
+    return money;
+  }
+
+  public int getCredits() {
+    return credits;
+  }
+
   public boolean canMove() {
     if (!moved && currRole == null) {
       return true;
@@ -173,11 +178,22 @@ public class Player {
     }
   }
 
+  public void setRoom(Room room) {
+    this.currRoom = room;
+    
+    if(room.isScene()) {
+      currScene = (Scene) room;
+    } else {
+      currScene = null;
+    }     
+  }
+
   public void endTurn() {
     moved = false;
   }
 
   public void leaveRole() {
-    currRoll = null;
+    currRole.setPlayer(null);
+    currRole = null;
   }
 }

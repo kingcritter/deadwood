@@ -1,5 +1,8 @@
+import java.util.*;
+
 public class CLIClient {
-  private GameBoard game;
+  private static GameBoard game;
+  private static Player player;
 
   public static void main(String[] args) {
     //get number of players
@@ -7,9 +10,21 @@ public class CLIClient {
     System.out.println("Please enter number of players: ");
     int numPlayers = userInput.nextInt();
     //initialize board
-    game = new Gameboard(numPlayers);
-    //modify game rules
-    //distribute initial cards
+    game = new GameBoard(numPlayers);
+
+    while (game.isRunning()) {
+      player = game.getCurrentPlayer();
+      Room currRoom =  player.getLocation();
+      int credits = player.getCredits();
+      int money = player.getDollars();
+      
+      boolean turnNotOver = true;
+      while (turnNotOver) {
+        String input = userInput.next();
+        System.out.println(input);        
+      }  
+    }
+
     //while running
       //while player turn (should we have a variable that tracks player or just go through gameboard?)
         //show possible commands (need variables to track remaining possible actions

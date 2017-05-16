@@ -12,16 +12,22 @@ public class GameBoard {
   private ArrayList<Card> cardDeck;
   private int playerIndex = 0;
   private int numPlayers;
-  private running = true;
+  private boolean running = true;
 
   public GameBoard(int numPlayers) {
     this.numPlayers = numPlayers;
+    playerList = new ArrayList<>();
 
     /* pull in data from XML files */
     initializeFromXML();
 
-    /* attatch a card to each scene */
-    distributeCards();
+    /* distribute cards to all the scenes */
+    Collections.shuffle(cardDeck);
+    int card = 0;
+    for (Scene s : sceneList) {
+      s.setCard(cardDeck.get(card));
+      card++;
+    }
 
     /* generate all the players */
     for (int i = 0; i < numPlayers; i++) {
@@ -37,15 +43,16 @@ public class GameBoard {
 
     /* set rules based on player number */
     modifyRules();
+
   }
 
   /* set rules based on player number */
   public void modifyRules() {
     if (numPlayers < 4) {
       totalDays = 3;
-    } else if (numPlayers = 5) {
+    } else if (numPlayers == 5) {
       setPlayerStats(2, 1);
-    } else if (numPlayers = 6) {
+    } else if (numPlayers == 6) {
       setPlayerStats(4, 1);
     } else if (numPlayers > 6) {
       setPlayerStats(0, 2);
@@ -53,13 +60,20 @@ public class GameBoard {
   }
 
   /* randomly distribute cards to scenes and reset scenes */
-  private void distributeCards() {
+  private void refreshScenes() {
     Collections.shuffle(cardDeck);
     int card = 0;
     for (Scene s : sceneList) {
-      s.reset();
+      /* remove players from roles */
+      for(Role r : s.getAllRoles()) {
+        if (r.getPlayer() != null) {
+          r.getPlayer().leaveRole();
+        }
+      }
+
       s.setCard(cardDeck.get(card));
       card++;
+      s.reset();
     }
   }
 
@@ -80,7 +94,7 @@ public class GameBoard {
   }
 
   public void nextTurn(Role role) {
-    // check next day/win conditions
+    /* check next day/win conditions */
     int scenesWrapped = 0;
     for (Scene s : sceneList) {
       if (s.isWrapped()) {
@@ -88,7 +102,7 @@ public class GameBoard {
       }
     }
 
-    if (scenesWrapped = (sceneList.size() - 1)) {
+    if (scenesWrapped == (sceneList.size() - 1)) {
       if (currDay == totalDays) {
         endGame();
       } else {
@@ -96,7 +110,7 @@ public class GameBoard {
       }
     }
 
-    /* increment and loop back to zero if needed*/
+    /* increment playerIndex and loop back to zero if needed*/
     playerIndex++;
     if (playerIndex >= numPlayers) {
       playerIndex = 0;
@@ -110,16 +124,14 @@ public class GameBoard {
   }
 
   public void endDay() {
-    // set players back to trailer, remove them from roles
+    /* set players back to trailer, remove them from roles */
     for (Player p : playerList) {
-      p.moveTo(trailer);
+      p.setRoom(trailer);
       p.leaveRole();
     }
     
-    // put new cards out
-
-    // reset scenes (remove shot counters, clear actors, etc)
-
+    /* put new cards out and reset scenes  */
+    refreshScenes();
   }
 
   /* Score = dollars + credits + (5 * rank) */
@@ -140,4 +152,8 @@ public class GameBoard {
   public boolean isRunning() {
     return running;
   }
+
+  public Player getCurrentPlayer() {
+    return currPlayer;
+  } 
 }

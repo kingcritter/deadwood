@@ -6,6 +6,7 @@ public class Scene extends Room {
   private int takesTotal;
   private int takesLeft;
   private Card card;
+  private boolean isScene = true;
 
   /* creates the scene */
   public Scene(String name, ArrayList<String> neighbors, 
@@ -14,7 +15,6 @@ public class Scene extends Room {
     this.roles = roles;
     this.takesTotal = takes;
     this.takesLeft = takes;
-    this.isScene = true;
   }
 
   /* Calls functions to pay players and remove them from their roles */
@@ -90,15 +90,29 @@ public class Scene extends Room {
     ArrayList<Role> availableRoles = new ArrayList<Role>();
     for(Role sceneRole: roles){
       if(sceneRole.getPlayer() == null){
-        availableRole.add(sceneRole);
+        availableRoles.add(sceneRole);
       }
     }
     for(Role onCardRole: getOnCardRoles()){
       if(onCardRole.getPlayer() == null){
-        availableRole.add(onCardRole);
+        availableRoles.add(onCardRole);
       }
     }
     return availableRoles;
+  }
+
+  public ArrayList<Role> getAllRoles() {
+    ArrayList<Role> all = new ArrayList<>();
+
+    for (Role r : getSceneRoles()) {
+      all.add(r);
+    }
+
+    for (Role r : getOnCardRoles()) {
+      all.add(r);
+    } 
+
+    return all;
   }
 
   /* lists all roles, filled and unfilled, not on the card */
@@ -114,6 +128,14 @@ public class Scene extends Room {
   /* returns the budget from the card */
   public int getBudget() {
     return card.getBudget();
+  }
+
+  public int getTakesLeft() {
+    return takesLeft;
+  }
+
+  public void decrementShotCounter() {
+    takesLeft--;
   }
 
   /* returns the wrapped state */

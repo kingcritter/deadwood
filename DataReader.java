@@ -58,7 +58,7 @@ public class DataReader {
     return roles;
   }
 
-  public ArrayList<Scene> getSceneList() throws Exception {
+  public ArrayList<Scene> getSceneList() {
     /* get the root element and generate a list of set nodes */
     Element root = parseFile(BOARDFILE);
     NodeList setNodeList = root.getElementsByTagName("set");
@@ -99,7 +99,7 @@ public class DataReader {
     return sceneList;
   }
 
-  public Room getTrailer() throws Exception {
+  public Room getTrailer() {
     Element root = parseFile(BOARDFILE);
     NodeList list = root.getElementsByTagName("trailer");
     Element e = (Element) list.item(0);
@@ -110,7 +110,7 @@ public class DataReader {
     return trailer;
   }
 
-  public CastingOffice getCastingOffice() throws Exception {
+  public CastingOffice getCastingOffice() {
     Element root = parseFile(BOARDFILE);
     NodeList list = root.getElementsByTagName("office");
     Element e = (Element) list.item(0);
@@ -121,7 +121,7 @@ public class DataReader {
     return office;
   }
 
-  public ArrayList<Card> getCardList() throws Exception {
+  public ArrayList<Card> getCardList() {
     /* get the root element and generate a list of card nodes */
     Element root = parseFile(CARDSFILE);
     NodeList list = root.getElementsByTagName("card");
@@ -155,33 +155,40 @@ public class DataReader {
     return cardList;
   }
   
-  private Element parseFile(String filename) throws Exception {
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    DocumentBuilder db = dbf.newDocumentBuilder(); 
-    Document doc = db.parse(new File(filename));
-    
-    Element root = doc.getDocumentElement();
+  private Element parseFile(String filename) {
+    Element root = null;
+    try {
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      DocumentBuilder db = dbf.newDocumentBuilder(); 
+      Document doc = db.parse(new File(filename));
+      
+      root = doc.getDocumentElement();      
+    } catch (Exception e) {
+      // ignore for now
+      System.out.println("XML Parsing went awry");
+      System.exit(0);
+    }
 
     return root;
   }
 
-  // public static void main(String[] args) throws Exception {
-  //   DataReader dr = new DataReader();
-  //   //ArrayList<Card> cards = dr.getCardList();
+  public static void main(String[] args) {
+    DataReader dr = new DataReader();
+    ArrayList<Card> cards = dr.getCardList();
 
-  //   // for (Card card : cards) {
-  //   //   System.out.println(card.getTitle());
-  //   //   for (Role role : card.getRoles()) {
-  //   //     System.out.format("    %s%n", role.getName());
-  //   //   }
-  //   // }
+    // for (Card card : cards) {
+    //   System.out.println(card.getTitle());
+    //   for (Role role : card.getRoles()) {
+    //     System.out.format("    %s%n", role.getName());
+    //   }
+    // }
 
-  //   ArrayList<Scene> scenes = dr.getSceneList();
-  //   for (Scene scene : scenes) {
-  //     System.out.println(scene.getName());
-  //     for (Role role : scene.getSceneRoles()) {
-  //       System.out.format("    %s%n", role.getName());
-  //     }
-  //   }
-  // }
+    ArrayList<Scene> scenes = dr.getSceneList();
+    for (Scene scene : scenes) {
+      System.out.println(scene.getOnCardRoles());
+      // for (Role r : scene.getOnCardRoles()) {
+      //   System.out.println(r.getName());
+      // }
+    }
+  }
 }

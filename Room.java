@@ -16,7 +16,7 @@ public class Room {
   }
 
   /* returns the list of rooms in the order NESW (clockwise from top) */
-  public ArrayList<Room> showAdjacentRooms() {
+  public ArrayList<Room> getAdjacentRooms() {
     ArrayList<Room> roomList = new ArrayList<>();
 
     roomList.add(north);
