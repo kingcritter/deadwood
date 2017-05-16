@@ -53,7 +53,7 @@ public class CLIClient {
             } else {
               role = player.getRole();
               if (role != null) {
-                output += ", working on " + scene.getName(); 
+                output += ", working on " + scene.getCardName(); 
               } else {
                 output += ", which is still shooting\n";
                 ArrayList<Role> roles = player.getAvailableRoles();
@@ -95,6 +95,59 @@ public class CLIClient {
           } else {
             System.out.println("Please specify a room");
           }
+        }
+
+        else if (input.equals("work")) {
+          String roleName = userInput.nextLine();
+          if (roleName != null) {
+            boolean roleTaken = player.takeRole(roleName);
+            if (roleTaken) {
+              System.out.println("You are now working on a role");
+            } else {
+              System.out.println("Not a valid role");
+            }
+          }
+        }
+
+        else if (input.equals("upgrade")) {
+          String type = userInput.next();
+          if (type != null) {
+            if (userInput.hasNextInt()) {
+              int level = userInput.nextInt();
+              if (type.equals(" $")) {
+                player.upgradeWithDollars(level);
+
+              } else if (type.equals(" cr")) {
+                player.upgradeWithCredits(level);
+              }
+            }
+          }
+        }
+
+
+        else if (input.equals("rehearse")) {
+          boolean success = player.rehearse();
+          if (success) {
+            System.out.println ("you rehearsed");
+          } else {
+            System.out.println ("you failed to rehearse");
+          }
+        }
+
+        else if (input.equals("act")) {
+          boolean success = player.act();
+          if (success) {
+            System.out.println("Acting succeded!");
+          } else {
+            System.out.println("Acting failed :(");
+          }
+
+        }
+
+        else if (input.equals("end")) {
+          System.out.println("You have ended your turn.");
+          game.nextTurn();
+          turnNotOver = false;
         }
       }  
     }

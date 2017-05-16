@@ -9,7 +9,8 @@ public class Player {
   private Room currRoom;
   private Role currRole = null;
   private Scene currScene = null;
-  private boolean moved; 
+  private boolean canMove = true; 
+  private boolean canAct = true;  
 
   public Player(int id, Room startingRoom) {
     currRoom = startingRoom;
@@ -17,18 +18,20 @@ public class Player {
   }
 
   public boolean moveTo(String newRoom) {
-    /* get rid of newlines and excess whitespace */
-    newRoom = newRoom.replace(System.getProperty("line.separator"), "");
-    newRoom = newRoom.trim().replaceAll(" +", " ");
+    if (canMove()) {
+      /* get rid of newlines and excess whitespace */
+      newRoom = newRoom.replace(System.getProperty("line.separator"), "");
+      newRoom = newRoom.trim().replaceAll(" +", " ");
 
-    boolean canMove = false;
-    for(Room neighbor : currRoom.getAdjacentRooms()){
-      if(newRoom.equals(neighbor.getName())) {
-         setRoom(neighbor);
-         canMove = true;
-       }
+      for(Room neighbor : currRoom.getAdjacentRooms()){
+        if(newRoom.equals(neighbor.getName())) {
+           setRoom(neighbor);
+           canMove = false;
+           return true;
+         }
+      }
     }
-    return canMove;
+    return false;
   }
 
   public Room getLocation() {
@@ -65,46 +68,61 @@ public class Player {
   }
   
   public boolean takeRole(String newRole) {
-    boolean canTakeRole = false;
-    for(Role availableRole: getAvailableRoles()) {
-      if(newRole.equals(availableRole.getName())) {
-         currRole = availableRole;
-         currRole.setPlayer(this);
-         canTakeRole = true;
+    /* get rid of newlines and excess whitespace */
+    newRole = newRole.replace(System.getProperty("line.separator"), "");
+    newRole = newRole.trim().replaceAll(" +", " ");
+
+    boolean tookRole  = false;
+    
+    if (currScene != null) {
+      for(Role availableRole : getAvailableRoles()) {
+        if(newRole.equals(availableRole.getName())) {
+           currRole = availableRole;
+           currRole.setPlayer(this);
+           tookRole = true;
+           canAct = false;
+           canMove = false;
+        }
       }
     }
-    return canTakeRole;
+    return tookRole;
   }
 
   public boolean act() {
-    Random rand = new Random();
-    int diceRoll = rand.nextInt(6) + 1;
-    System.out.println("You rolled " + diceRoll);
-    if(diceRoll < currScene.getBudget()){
-      System.out.println("Acting failed.");
-      if(currRole.isOnCard() == false){
-         money = money + 1;
-      }
-      return false;
-    }else{
-      System.out.println("Acting succeeded!");
-      if(currRole.isOnCard() == true){
-         credits = credits + 2;
+    if (canAct) {
+      canAct = false;
+      Random rand = new Random();
+      int diceRoll = rand.nextInt(6) + 1;
+      System.out.println("You rolled " + diceRoll);
+      if(diceRoll < currScene.getBudget()){
+        if(currRole.isOnCard() == false){
+           money = money + 1;
+        }
+        return false;
       }else{
-         money = money + 1;
-         credits = credits + 1;
+        if(currRole.isOnCard() == true){
+           credits = credits + 2;
+        }else{
+           money = money + 1;
+           credits = credits + 1;
+        }
+        currScene.decrementShotCounter();
+        return true;
       }
-      currScene.decrementShotCounter();
-      return true;
     }
+    return false;
   }
 
   // not more than +5
   public boolean rehearse() {
-    if(rehearseBonus+1 < currScene.getBudget()) { 
-      this.rehearseBonus = this.rehearseBonus + 1;
+    if (canAct) {
+      if(rehearseBonus+1 < currScene.getBudget()) { 
+        this.rehearseBonus = this.rehearseBonus + 1;
+      }
+      return true;
     }
-    return true;
+    canAct = false;
+    return false;
   }
 
    public boolean upgradeWithDollars(int newRank) {
@@ -189,7 +207,7 @@ public class Player {
   }
 
   public boolean canMove() {
-    if (!moved && currRole == null) {
+    if (canMove && currRole == null) {
       return true;
     } else {
       return false;
@@ -207,7 +225,8 @@ public class Player {
   }
 
   public void endTurn() {
-    moved = false;
+    canMove = true;
+    canAct = true;
   }
 
   public void leaveRole() {

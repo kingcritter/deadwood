@@ -122,7 +122,8 @@ public class GameBoard {
     }
   }
 
-  public void nextTurn(Role role) {
+  public void nextTurn() {
+    currPlayer.endTurn();
     /* check next day/win conditions */
     int scenesWrapped = 0;
     for (Scene s : sceneList) {

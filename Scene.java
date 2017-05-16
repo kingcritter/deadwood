@@ -150,6 +150,10 @@ public class Scene extends Room {
     return isScene;
   }
 
+  public String getCardName() {
+    return card.getTitle();
+  } 
+
   public void reset() {
     wrapped = false;
     takesLeft = takesTotal;
