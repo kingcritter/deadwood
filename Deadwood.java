@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class CLIClient {
+public class Deadwood {
   private static GameBoard game;
   private static Player player;
 
