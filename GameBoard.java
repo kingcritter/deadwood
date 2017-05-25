@@ -186,4 +186,8 @@ public class GameBoard {
   public Player getCurrentPlayer() {
     return currPlayer;
   } 
+
+  public int getTotalDays() {
+    return totalDays;
+  }
 }

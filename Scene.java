@@ -34,14 +34,20 @@ public class Scene extends Room {
 
     /* remove players from scene roles*/
     for (Role r : roles) {
-      r.getPlayer().leaveRole();
-      r.setPlayer(null);
+      Player p = r.getPlayer();
+      if (p != null) {
+        p.leaveRole();
+        r.setPlayer(null);
+      }
     }
 
     /* remove players from on-card roles */
     for (Role r : getOnCardRoles()) {
-      r.getPlayer().leaveRole();
-      r.setPlayer(null);
+      Player p = r.getPlayer();
+      if (p != null) {
+        p.leaveRole();
+        r.setPlayer(null);
+      }
     }
 
   }
@@ -86,16 +92,19 @@ public class Scene extends Room {
     }
   }
 
+  /* if wrapped, return empty list */
   public ArrayList<Role> getAvailableRoles() {
     ArrayList<Role> availableRoles = new ArrayList<Role>();
-    for(Role sceneRole: roles){
-      if(sceneRole.getPlayer() == null){
-        availableRoles.add(sceneRole);
+    if (!wrapped) {
+      for(Role sceneRole: roles){
+        if(sceneRole.getPlayer() == null){
+          availableRoles.add(sceneRole);
+        }
       }
-    }
-    for(Role onCardRole: getOnCardRoles()){
-      if(onCardRole.getPlayer() == null){
-        availableRoles.add(onCardRole);
+      for(Role onCardRole: getOnCardRoles()){
+        if(onCardRole.getPlayer() == null){
+          availableRoles.add(onCardRole);
+        }
       }
     }
     return availableRoles;
@@ -136,6 +145,9 @@ public class Scene extends Room {
 
   public void decrementShotCounter() {
     takesLeft--;
+    if (takesLeft <= 0) {
+      wrapScene();
+    }
   }
 
   /* returns the wrapped state */

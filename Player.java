@@ -76,7 +76,8 @@ public class Player {
     
     if (currScene != null) {
       for(Role availableRole : getAvailableRoles()) {
-        if(newRole.equals(availableRole.getName())) {
+        if(newRole.equals(availableRole.getName()) &&
+           this.rank >=  availableRole.getRank()) {
            currRole = availableRole;
            currRole.setPlayer(this);
            tookRole = true;
@@ -232,5 +233,9 @@ public class Player {
   public void leaveRole() {
     currRole.setPlayer(null);
     currRole = null;
+  }
+
+  public int getRehearseBonus() {
+    return rehearseBonus;
   }
 }

@@ -41,7 +41,7 @@ public class DataReader {
     return neighbors;
   }
 
-  private ArrayList<Role> getRoles(NodeList nl) {
+  private ArrayList<Role> getRoles(NodeList nl, boolean onCard) {
     ArrayList<Role> roles = new ArrayList<>();
 
     for (int j = 0; j < nl.getLength(); j++) {
@@ -51,7 +51,7 @@ public class DataReader {
       int rank = Integer.parseInt(part.getAttribute("level"));
       String line = part.getElementsByTagName("line").item(0).getTextContent();
       
-      Role role = new Role(rank, name, line, true);
+      Role role = new Role(rank, name, line, onCard);
       roles.add(role);
     }
 
@@ -80,7 +80,7 @@ public class DataReader {
       NodeList nl = e.getElementsByTagName("parts");
       Element ne = (Element) nl.item(0);
       nl = ne.getElementsByTagName("part");
-      ArrayList<Role> roles = getRoles(nl);
+      ArrayList<Role> roles = getRoles(nl, false);
 
       /* get the take number */
       nl = e.getElementsByTagName("takes");
@@ -144,7 +144,7 @@ public class DataReader {
           
       NodeList roleNodes = e.getElementsByTagName("part");
 
-      roles = getRoles(roleNodes);
+      roles = getRoles(roleNodes, true);
       
 
       Card card = new Card(budget, roles, title, flavorText);

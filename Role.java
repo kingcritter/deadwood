@@ -51,9 +51,6 @@ public class Role implements Comparable<Role> {
     this.player = p;
   }
 
-  public void setOnCard(boolean b) {
-    this.onCard = b;
-  }
 
   /* implementing compareTo allows Roles to be sorted;
      sorting is by rank, and the natural order is low to high*/

@@ -1,0 +1,20 @@
+Changelog:
+
+Wednesday, May 24th 2017
+
+added getTotalDays() to GameBoard
+added getRehearseBonus() to Player
+
+fixed taking roles: previously, there was no check on whether
+a player was a high enough rank to take the role. Fixed by
+adding check in Player.takeRole()
+
+fixed onCard attribute of roles: previously, the DataReader 
+class was hardcoded to call the Role constructor with "false"
+for the onCard attribute. Fixed by changing DataReader.getRoles()
+to accept a boolean onCard argument.
+
+fixed Scene class so wrapScene is actually called: previously, 
+decrementShotCounter() would only decrement the shot counter. 
+Fixed by adding a check to see if the count drops to zero, in
+which case wrapScene() is called. 
