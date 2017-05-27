@@ -5,8 +5,8 @@ public class CastingOffice extends Room {
    private static int[] costDollars = {4, 10, 18, 28, 40};
    private static int[] costCredits = {5, 10, 15, 20, 25};
    
-   public CastingOffice(String name, ArrayList<String> neighbors){
-      super(name, neighbors);
+   public CastingOffice(String name, ArrayList<String> neighbors, Room.Area area){
+      super(name, neighbors, area);
    }
    
    public static ArrayList<Integer> showPossibleRanksDollars(int playerRank, int playerDollars){

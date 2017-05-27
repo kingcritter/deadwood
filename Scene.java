@@ -7,14 +7,17 @@ public class Scene extends Room {
   private int takesLeft;
   private Card card;
   private boolean isScene = true;
+  private HashMap<Integer, Room.Area> takesArea;
 
   /* creates the scene */
   public Scene(String name, ArrayList<String> neighbors, 
-               ArrayList<Role> roles, int takes) {
-    super(name, neighbors);
+               ArrayList<Role> roles, int takes,
+               HashMap<Integer, Room.Area> takesArea, Room.Area cardArea) {
+    super(name, neighbors, cardArea);
     this.roles = roles;
     this.takesTotal = takes;
     this.takesLeft = takes;
+    this.takesArea = takesArea;
   }
 
   /* Calls functions to pay players and remove them from their roles */
@@ -141,6 +144,10 @@ public class Scene extends Room {
 
   public int getTakesLeft() {
     return takesLeft;
+  }
+
+  public HashMap<Integer, Room.Area> getTakesArea() {
+    return takesArea;
   }
 
   public void decrementShotCounter() {

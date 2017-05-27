@@ -5,13 +5,16 @@ public class Role implements Comparable<Role> {
   private boolean onCard;
   private String name;
   private String line;
+  private Room.Area area;
 
   /* create role with specified rank */
-  public Role(int rank, String name, String line, boolean onCard) {
+  public Role(int rank, String name, String line, boolean onCard, Room.Area area) {
     this.rank = rank;
     this.name = name;
     this.line = line;
     this.onCard = onCard;
+    this.area = area;
+
   }
 
   /* return the ID*/
@@ -49,6 +52,10 @@ public class Role implements Comparable<Role> {
   /* sets the player */
   public void setPlayer(Player p) {
     this.player = p;
+  }
+
+  public Room.Area getArea() {
+    return area;
   }
 
 

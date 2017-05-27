@@ -50,12 +50,26 @@ public class DataReader {
       String name = part.getAttribute("name");
       int rank = Integer.parseInt(part.getAttribute("level"));
       String line = part.getElementsByTagName("line").item(0).getTextContent();
+
+      /* get the area attributes of the role */
+      Element areaEl = (Element) part.getElementsByTagName("area").item(0);
+      Room.Area area = getAreaFromElement(areaEl);
       
-      Role role = new Role(rank, name, line, onCard);
+      Role role = new Role(rank, name, line, onCard, area);
       roles.add(role);
     }
 
     return roles;
+  }
+
+private Room.Area getAreaFromElement(Element areaEl) {
+    int x = Integer.parseInt(areaEl.getAttribute("x"));
+    int y = Integer.parseInt(areaEl.getAttribute("y"));
+    int h = Integer.parseInt(areaEl.getAttribute("h"));
+    int w = Integer.parseInt(areaEl.getAttribute("w"));
+    Room.Area area = new Room.Area(x, y, h, w);
+
+    return area;
   }
 
   public ArrayList<Scene> getSceneList() {
@@ -90,8 +104,20 @@ public class DataReader {
       ne = (Element) nl.item(0);
       int takes = Integer.parseInt(ne.getAttribute("number"));
 
+      /* now loop though the takes and save the area attributes */
+      HashMap<Integer, Room.Area> takesArea = new HashMap<>();
+      for (int j = takes; j > 0; j--) {
+        ne = (Element) nl.item(j-1);
+        NodeList areas = ne.getElementsByTagName("area");
+        ne = (Element) areas.item(0); // get the only area tag 
+        /* grab the attributes */
+        Room.Area area = getAreaFromElement(ne);
+        takesArea.put(j, area);
+      }      
+
+
       /* finally, create the scene object and add it to the list */
-      Scene scene = new Scene(title, neighbors, roles, takes);
+      Scene scene = new Scene(title, neighbors, roles, takes, takesArea, null);
       sceneList.add(scene);
 
     }
@@ -106,7 +132,11 @@ public class DataReader {
 
     ArrayList<String> neighbors = getNeighbors(e);
 
-    Room trailer = new Room("Trailer", neighbors);
+    /* get the area */
+    e = (Element) e.getElementsByTagName("area").item(0);
+    Room.Area area = getAreaFromElement(e);
+
+    Room trailer = new Room("Trailer", neighbors, area);
     return trailer;
   }
 
@@ -117,7 +147,12 @@ public class DataReader {
 
     ArrayList<String> neighbors = getNeighbors(e);
 
-    CastingOffice office = new CastingOffice("Casting Office", neighbors);
+    /* get the area */
+    e = (Element) e.getElementsByTagName("area").item(0);
+    Room.Area area = getAreaFromElement(e);
+
+
+    CastingOffice office = new CastingOffice("Casting Office", neighbors, area);
     return office;
   }
 
@@ -179,16 +214,36 @@ public class DataReader {
     // for (Card card : cards) {
     //   System.out.println(card.getTitle());
     //   for (Role role : card.getRoles()) {
-    //     System.out.format("    %s%n", role.getName());
+    //     System.out.format("\t%s\n", role.getArea().toString());
     //   }
     // }
 
     ArrayList<Scene> scenes = dr.getSceneList();
-    for (Scene scene : scenes) {
-      System.out.println(scene.getName());
-      // for (Role r : scene.getOnCardRoles()) {
-      //   System.out.println(r.getName());
-      // }
+
+    /* distribute cards to all the scenes */
+    Collections.shuffle(cards);
+    int card = 0;
+    for (Scene s : scenes) {
+      s.setCard(cards.get(card));
+      card++;
     }
+
+    // for (Scene scene : scenes) {
+    //   System.out.format("%s, %d takes\n", scene.getName(), scene.getTakesLeft());
+
+      // HashMap<Integer, Room.Area> takesArea = scene.getTakesArea();
+      // for (int i = 1; i <= scene.getTakesLeft(); i++) {
+      //   System.out.format("\tTake %d: %s\n", i, takesArea.get(i).toString());
+      // }
+      // for (Role r : scene.getOnCardRoles()) {
+      //   System.out.format("\t%s: %s\n", r.getName(), r.getArea().toString());
+      // }
+    // }
+
+    // Room t = dr.getTrailer();
+    // CastingOffice o = dr.getCastingOffice();
+
+    // System.out.println(t.getArea());
+    // System.out.println(o.getArea());
   }
 }
