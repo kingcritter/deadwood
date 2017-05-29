@@ -3,7 +3,7 @@ import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Deadwood {
+public class DeadwoodGUI {
 
    private static class Closer extends WindowAdapter {
       public void windowClosing (WindowEvent e){
