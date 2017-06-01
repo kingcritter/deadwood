@@ -170,7 +170,9 @@ private Room.Area getAreaFromElement(Element areaEl) {
 
       String title = e.getAttribute("name");
       int budget = Integer.parseInt(e.getAttribute("budget"));
-      String flavorText = e.getElementsByTagName("scene").item(0).getTextContent();
+      Element scene = (Element) e.getElementsByTagName("scene").item(0);
+      String flavorText = scene.getTextContent();
+      int sceneNumber = Integer.parseInt(scene.getAttribute("number"));
       ArrayList<Role> roles;
       
       /* get rid of newlines and excess whitespace */
@@ -182,7 +184,7 @@ private Room.Area getAreaFromElement(Element areaEl) {
       roles = getRoles(roleNodes, true);
       
 
-      Card card = new Card(budget, roles, title, flavorText);
+      Card card = new Card(budget, roles, title, flavorText, sceneNumber);
       cardList.add(card);
 
     }
