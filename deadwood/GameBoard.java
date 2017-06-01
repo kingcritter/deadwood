@@ -1,3 +1,4 @@
+package deadwood;
 import java.util.*;
 
 public class GameBoard {
@@ -189,5 +190,9 @@ public class GameBoard {
 
   public int getTotalDays() {
     return totalDays;
+  }
+
+  public ArrayList<Scene> getSceneList() {
+    return sceneList;
   }
 }

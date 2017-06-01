@@ -1,3 +1,4 @@
+package deadwood;
 import javax.xml.parsers.DocumentBuilder; 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -113,11 +114,15 @@ private Room.Area getAreaFromElement(Element areaEl) {
         /* grab the attributes */
         Room.Area area = getAreaFromElement(ne);
         takesArea.put(j, area);
-      }      
+      }
+
+      /* get teh actual area where the cards go */
+      NodeList arealist = e.getElementsByTagName("area");
+      Room.Area area = getAreaFromElement((Element) arealist.item(0));
 
 
       /* finally, create the scene object and add it to the list */
-      Scene scene = new Scene(title, neighbors, roles, takes, takesArea, null);
+      Scene scene = new Scene(title, neighbors, roles, takes, takesArea, area);
       sceneList.add(scene);
 
     }

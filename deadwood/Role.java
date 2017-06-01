@@ -1,3 +1,4 @@
+package deadwood;
 public class Role implements Comparable<Role> {
   private int id; 
   private int rank;

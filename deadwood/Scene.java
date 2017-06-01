@@ -1,6 +1,23 @@
+package deadwood;
 import java.util.*;
 
 public class Scene extends Room {
+  public interface Listener {
+    void changed(Scene s);
+  }
+  private Collection<Listener> listeners;
+
+  public void subscribe(Listener l) {
+    listeners.add(l);
+  }
+
+  protected void changed() {
+    for (Listener l : listeners) {
+      l.changed(this);
+    }
+  }
+
+
   private boolean wrapped = false;
   private ArrayList<Role> roles;
   private int takesTotal;
@@ -8,6 +25,7 @@ public class Scene extends Room {
   private Card card;
   private boolean isScene = true;
   private HashMap<Integer, Room.Area> takesArea;
+
 
   /* creates the scene */
   public Scene(String name, ArrayList<String> neighbors, 
@@ -18,6 +36,7 @@ public class Scene extends Room {
     this.takesTotal = takes;
     this.takesLeft = takes;
     this.takesArea = takesArea;
+    this.listeners = new LinkedList<Listener>();
   }
 
   /* Calls functions to pay players and remove them from their roles */
@@ -52,6 +71,9 @@ public class Scene extends Room {
         r.setPlayer(null);
       }
     }
+
+    /* notify lsiteners */
+    changed();
 
   }
 
@@ -155,6 +177,8 @@ public class Scene extends Room {
     if (takesLeft <= 0) {
       wrapScene();
     }
+    /* notify lsiteners */
+    changed();
   }
 
   /* returns the wrapped state */
@@ -173,9 +197,15 @@ public class Scene extends Room {
     return card.getTitle();
   } 
 
+  public Card getCard() {
+    return card;
+  } 
+
   public void reset() {
     wrapped = false;
     takesLeft = takesTotal;
+    /* notify lsiteners */
+    changed();
   }
 
 }
