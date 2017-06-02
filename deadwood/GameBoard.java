@@ -188,6 +188,10 @@ public class GameBoard {
     return currPlayer;
   } 
 
+  public ArrayList<Player> getPlayerList() {
+    return playerList;
+  } 
+
   public int getTotalDays() {
     return totalDays;
   }
