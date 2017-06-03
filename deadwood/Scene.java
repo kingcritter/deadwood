@@ -24,23 +24,25 @@ public class Scene extends Room {
   private int takesLeft;
   private Card card;
   private boolean isScene = true;
-  private HashMap<Integer, Room.Area> takesArea;
+  private boolean visited = false;
+  private HashMap<Integer, Room.Area> shotCounterAreas;
 
 
   /* creates the scene */
   public Scene(String name, ArrayList<String> neighbors, 
                ArrayList<Role> roles, int takes,
-               HashMap<Integer, Room.Area> takesArea, Room.Area cardArea) {
+               HashMap<Integer, Room.Area> shotCounterAreas, Room.Area cardArea) {
     super(name, neighbors, cardArea);
     this.roles = roles;
     this.takesTotal = takes;
     this.takesLeft = takes;
-    this.takesArea = takesArea;
+    this.shotCounterAreas = shotCounterAreas;
     this.listeners = new LinkedList<Listener>();
   }
 
   /* Calls functions to pay players and remove them from their roles */
   public void wrapScene() {
+    System.out.println("Wrapping Scene");
     wrapped = true;
 
     /* pay out to players working the on-card roles*/
@@ -72,17 +74,17 @@ public class Scene extends Room {
       }
     }
 
-    /* notify lsiteners */
-    changed();
 
   }
 
   /* pay out on card bonuses to players */
   private void payOnCardBonus() {
+    System.out.println("Paying on Card Bonus");
     Random rand = new Random();
 
     /* roll as many dice as the budget is */
     Stack<Integer> dice = new Stack<>();
+
     for (int i = 0; i < getBudget(); i++) {
       int die = rand.nextInt(6) + 1;
       dice.push(die);
@@ -91,6 +93,8 @@ public class Scene extends Room {
     /* sort dice from lowest to highest  */
     Collections.sort(dice);
 
+    System.out.println("Sorted Dice: ");
+    System.out.println(dice.toString());
     /* create queue of roles and add all on card roles to it */
     ArrayList<Role> roles = new ArrayList<>();
     for (Role r : getOnCardRoles()) {
@@ -168,17 +172,21 @@ public class Scene extends Room {
     return takesLeft;
   }
 
-  public HashMap<Integer, Room.Area> getTakesArea() {
-    return takesArea;
+  public int getTotalTakes() {
+    return takesTotal;
+  }
+
+  public HashMap<Integer, Room.Area> getShotCounterAreas() {
+    return shotCounterAreas;
   }
 
   public void decrementShotCounter() {
-    takesLeft--;
-    if (takesLeft <= 0) {
-      wrapScene();
+    if(takesLeft > 0){
+      takesLeft--;
+      if (takesLeft <= 0) {
+        wrapScene();
+      }
     }
-    /* notify lsiteners */
-    changed();
   }
 
   /* returns the wrapped state */
@@ -201,9 +209,18 @@ public class Scene extends Room {
     return card;
   } 
 
+  public boolean visited() {
+    return visited;
+  }
+
+  public void visit() {
+    visited = true;
+  }
+
   public void reset() {
     wrapped = false;
     takesLeft = takesTotal;
+    visited = false;
     /* notify lsiteners */
     changed();
   }

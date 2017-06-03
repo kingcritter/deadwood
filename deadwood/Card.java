@@ -7,14 +7,20 @@ public class Card {
   private String title;
   private String flavorText;
   private int cardNumber;
+  private String image;
 
-  public Card(int budget, ArrayList<Role> roles, 
-              String title, String flavorText, int cardNumber) {
+  public Card(int budget, ArrayList<Role> roles, String title, 
+              String flavorText, int cardNumber, String image) {
     this.budget = budget;
     this.onCardRoles = roles;
     this.title = title;
     this.flavorText = flavorText;
     this.cardNumber = cardNumber;
+    this.image = image;
+  }
+
+  public String getImage() {
+    return image;
   }
 
   public int getCardNumber() {

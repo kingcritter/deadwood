@@ -157,7 +157,7 @@ private Room.Area getAreaFromElement(Element areaEl) {
     Room.Area area = getAreaFromElement(e);
 
 
-    CastingOffice office = new CastingOffice("Casting Office", neighbors, area);
+    CastingOffice office = new CastingOffice("office", neighbors, area);
     return office;
   }
 
@@ -174,6 +174,7 @@ private Room.Area getAreaFromElement(Element areaEl) {
       Element e = (Element) n;
 
       String title = e.getAttribute("name");
+      String image = e.getAttribute("img");
       int budget = Integer.parseInt(e.getAttribute("budget"));
       Element scene = (Element) e.getElementsByTagName("scene").item(0);
       String flavorText = scene.getTextContent();
@@ -189,7 +190,7 @@ private Room.Area getAreaFromElement(Element areaEl) {
       roles = getRoles(roleNodes, true);
       
 
-      Card card = new Card(budget, roles, title, flavorText, sceneNumber);
+      Card card = new Card(budget, roles, title, flavorText, sceneNumber, image);
       cardList.add(card);
 
     }

@@ -58,7 +58,7 @@ public class GameBoard {
     for (Room room : roomList) {
       for (String neighbor : room.getNeighbors()) {
         for (Room room2 : roomList) {
-          if (neighbor.equals(room2.getName())) {
+          if (neighbor.equalsIgnoreCase(room2.getName())) {
             room.addAdjacent(room2);
             break;
           }

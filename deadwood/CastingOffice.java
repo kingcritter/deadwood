@@ -10,23 +10,24 @@ public class CastingOffice extends Room {
       super(name, neighbors, area);
    }
    
-   public static ArrayList<Integer> showPossibleRanksDollars(int playerRank, int playerDollars){
-      ArrayList<Integer> possibleRanks = new ArrayList<>();
-      for(int i=playerRank+1; i<ranks.length; i++){
+   public static HashMap<Integer, Integer> showPossibleRanksDollars(int playerRank, int playerDollars){
+      HashMap<Integer, Integer> possibleRanks = new HashMap<>();
+      for(int i=playerRank-1; i<ranks.length; i++){
+         System.out.println("Rank:" + playerRank + " p$:" + playerDollars + " i:" + i);
          if(playerDollars >= costDollars[i]){
             System.out.println(ranks[i] + " = " +costDollars[i] + " dollars");
-            possibleRanks.add(ranks[i]);
+            possibleRanks.put(ranks[i], costDollars[i]);
          } 
       }
       return possibleRanks;
    }
    
-   public static ArrayList<Integer> showPossibleRanksCredits(int playerRank, int playerCredits){
-      ArrayList<Integer> possibleRanks = new ArrayList<>();
-      for(int i=playerRank+1; i<ranks.length; i++){
+   public static HashMap<Integer, Integer> showPossibleRanksCredits(int playerRank, int playerCredits){
+      HashMap<Integer, Integer> possibleRanks = new HashMap<>();
+      for(int i=playerRank-1; i<ranks.length; i++){
          if(playerCredits >= costCredits[i]){
             System.out.println(ranks[i] + " = " +costCredits[i] + " dollars");
-            possibleRanks.add(ranks[i]);
+            possibleRanks.put(ranks[i], costCredits[i]);
          } 
       }
       return possibleRanks;

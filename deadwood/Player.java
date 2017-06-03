@@ -25,7 +25,7 @@ public class Player {
       newRoom = newRoom.trim().replaceAll(" +", " ");
 
       for(Room neighbor : currRoom.getAdjacentRooms()){
-        if(newRoom.equals(neighbor.getName())) {
+        if(newRoom.equalsIgnoreCase(neighbor.getName())) {
            setRoom(neighbor);
            canMove = false;
            return true;
@@ -64,8 +64,15 @@ public class Player {
   }
   
   public ArrayList<Role> getAvailableRoles(){
-     ArrayList<Role> roles = currScene.getAvailableRoles();
-     return roles;
+    ArrayList<Role> roles = currScene.getAvailableRoles();
+    /* remove level-restricted roles */
+    for (int i = 0; i < roles.size(); i++) {
+      if (this.rank < roles.get(i).getRank()) {
+        roles.remove(i);
+        i--;
+      }
+    }
+    return roles;
   }
   
   public boolean takeRole(String newRole) {
@@ -84,6 +91,7 @@ public class Player {
            tookRole = true;
            canAct = false;
            canMove = false;
+           rehearseBonus = 0;
         }
       }
     }
@@ -96,7 +104,7 @@ public class Player {
       Random rand = new Random();
       int diceRoll = rand.nextInt(6) + 1;
       System.out.println("You rolled " + diceRoll);
-      if(diceRoll < currScene.getBudget()){
+      if(diceRoll + rehearseBonus < currScene.getBudget()){
         if(currRole.isOnCard() == false){
            money = money + 1;
         }
@@ -120,73 +128,73 @@ public class Player {
     if (canAct) {
       if(rehearseBonus+1 < currScene.getBudget()) { 
         this.rehearseBonus = this.rehearseBonus + 1;
+        canAct = false;
       }
       return true;
     }
-    canAct = false;
     return false;
   }
 
-   public boolean upgradeWithDollars(int newRank) {
-    ArrayList<Integer> possibleRanks;
-    if(rank == 6){
-      System.out.println("No further upgrade possible.");
-    }else{
-      possibleRanks = CastingOffice.showPossibleRanksDollars(rank, money);
-      if(possibleRanks.contains(newRank)){
-         if(newRank == 2){
-            rank = 2;
-            money = money - 4;
-         }else if(newRank == 3){
-            rank = 3;
-            money = money - 10;
-         }else if(newRank == 4){
-            rank = 4;
-            money = money - 18;
-         }else if(newRank == 5){
-            rank = 5;
-            money = money - 28;
-         }else{
-            rank = 6;
-            money = money - 40;
-         }
-         return true;
-      }
-      return false;
-    }
+  //  public boolean upgradeWithDollars(int newRank) {
+  //   ArrayList<Integer> possibleRanks;
+  //   if(rank == 6){
+  //     System.out.println("No further upgrade possible.");
+  //   }else{
+  //     possibleRanks = CastingOffice.showPossibleRanksDollars(rank, money);
+  //     if(possibleRanks.contains(newRank)){
+  //        if(newRank == 2){
+  //           rank = 2;
+  //           money = money - 4;
+  //        }else if(newRank == 3){
+  //           rank = 3;
+  //           money = money - 10;
+  //        }else if(newRank == 4){
+  //           rank = 4;
+  //           money = money - 18;
+  //        }else if(newRank == 5){
+  //           rank = 5;
+  //           money = money - 28;
+  //        }else{
+  //           rank = 6;
+  //           money = money - 40;
+  //        }
+  //        return true;
+  //     }
+  //     return false;
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 
-  public boolean upgradeWithCredits(int newRank) {
-   ArrayList<Integer> possibleRanks;
-    if(rank == 6){
-      System.out.println("No further upgrade possible.");
-    }else{
-      possibleRanks = CastingOffice.showPossibleRanksCredits(rank, credits);
-      if(possibleRanks.contains(newRank)){
-         if(newRank == 2){
-            rank = 2;
-            credits = credits - 5;
-         }else if(newRank == 3){
-            rank = 3;
-            credits = credits - 10;
-         }else if(newRank == 4){
-            rank = 4;
-            credits = credits - 15;
-         }else if(newRank == 5){
-            rank = 5;
-            credits = credits - 20;
-         }else{
-            rank = 6;
-            credits = credits - 25;
-         }
-         return true;
-      }
-      return false;
-    }
-    return false;
-  }
+  //public boolean upgradeWithCredits(int newRank) {
+   // ArrayList<Integer> possibleRanks;
+   //  if(rank == 6){
+   //    System.out.println("No further upgrade possible.");
+   //  }else{
+   //    possibleRanks = CastingOffice.showPossibleRanksCredits(rank, credits);
+   //    if(possibleRanks.contains(newRank)){
+   //       if(newRank == 2){
+   //          rank = 2;
+   //          credits = credits - 5;
+   //       }else if(newRank == 3){
+   //          rank = 3;
+   //          credits = credits - 10;
+   //       }else if(newRank == 4){
+   //          rank = 4;
+   //          credits = credits - 15;
+   //       }else if(newRank == 5){
+   //          rank = 5;
+   //          credits = credits - 20;
+   //       }else{
+   //          rank = 6;
+   //          credits = credits - 25;
+   //       }
+   //       return true;
+   //    }
+   //    return false;
+   //  }
+   //  return false;
+  //}
 
   public void payDollars(int money) {
     this.money += money; 
@@ -216,6 +224,13 @@ public class Player {
     }
   }
 
+  public boolean canAct() {
+    if(currRole == null){
+      return false;
+    }
+    return canAct;
+  }
+
   public void setRoom(Room room) {
     this.currRoom = room;
     
@@ -223,7 +238,7 @@ public class Player {
       currScene = (Scene) room;
     } else {
       currScene = null;
-    }     
+    }
   }
 
   public void endTurn() {
